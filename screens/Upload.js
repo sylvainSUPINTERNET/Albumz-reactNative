@@ -141,6 +141,12 @@ export default class Upload extends Component<{}> {
             let salt = this.makeIdForPic();
             data.append('picture_upload', {uri: uriList[0], name: salt + renamePic + '.jpg', type: 'image/jpg'});
 
+
+            //trim token to get only id to find user for insert with OneToMany
+            let id_from_token = this.state.token.replace(/\D/g,'');
+            data.append('picture_user_token', id_from_token);
+
+
             // Create the config object for the POST
             // You typically have an OAuth2 token that you use for authentication
             const config = {

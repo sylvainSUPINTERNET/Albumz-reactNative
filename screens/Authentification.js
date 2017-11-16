@@ -191,12 +191,12 @@ export default class Authentification extends Component<{}> {
                         <Text>Firstname</Text>
                         <TextInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(firstname) => this.setState({register_firstname: firstname})}
+                            onChangeText={(firstname) => this.setState({register_firstname: firstname.replace(/[0-9]/g, '')})}
                         />
                         <Text>Lastname</Text>
                         <TextInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(lastname) => this.setState({register_lastname: lastname})}
+                            onChangeText={(lastname) => this.setState({register_lastname: lastname.replace(/[0-9]/g, '')})}
                         />
                         <Text>Email</Text>
                         <TextInput

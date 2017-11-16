@@ -7,7 +7,7 @@ import { StackNavigator, DrawerNavigator } from 'react-navigation';
 import Upload from './screens/Upload';
 import Home from './screens/Home';
 import Authentification from './screens/Authentification';
-
+import MyPictures from './screens/MyPictures';
 
 //faire le logout (check if one key user_token is not empty in storage
 //if not empty => user is connected so display the button "logout" into the menu and create a method to remove th keyItem
@@ -23,6 +23,9 @@ const drawerMenu = DrawerNavigator({
     Upload: {
         screen: Upload,
     },
+    MyPicture: {
+        screen: MyPictures
+    }
 });
 
 AppRegistry.registerComponent('AlbumzV2Ejected', () => drawerMenu);
