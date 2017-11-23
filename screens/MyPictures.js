@@ -73,6 +73,15 @@ export default class Home extends Component<{}> {
 
                     try{
                         let json = JSON.parse(responseData._bodyText);
+                        if(json[0].error === true){ // true beause, No image to display error return from API
+                            Alert.alert(json[0].message);
+                            console.log("VOUS AVEZ PAS D4IMAGE");
+                            //If every image have been deleted => redirect on button "Display image"
+                            this.setState({
+                                displayPictures: false
+                            })
+                        }
+
                         let arrayPictures = json.map(function(item){
                             return item.name.toString();
                         });
@@ -81,7 +90,8 @@ export default class Home extends Component<{}> {
                                 json_pictures: json,
                                 pictures: arrayPictures,
                             });
-                            console.log(this.state.pictures);
+                            console.log("your_pictures",this.state.pictures);
+
 
                     }catch (err){
                         console.log(err);
@@ -137,13 +147,18 @@ export default class Home extends Component<{}> {
                                     let json = JSON.parse(responseData._bodyText);
 
                                     console.log(json[0]);
+
+                                    /*
                                     if(json[0].error === true){ // true beause, No image to display error return from API
-                                        console.log("REDIRECT NO IMAGE");
+                                        Alert.alert(json[0].message);
+                                        console.log("VOUS AVEZ PAS D4IMAGE");
                                         //If every image have been deleted => redirect on button "Display image"
                                         this.setState({
                                             displayPictures: false
                                         })
                                     }
+                                    */
+
                                     let arrayPictures = json.map(function(item){
                                         return item.name.toString();
                                     });
@@ -152,7 +167,6 @@ export default class Home extends Component<{}> {
                                         json_pictures: json,
                                         pictures: arrayPictures,
                                     });
-                                    console.log("YOUR PICTURE", this.state.pictures);
 
                                 }catch (err){
                                     console.log(err);
