@@ -9,7 +9,7 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage, Button,FlatList, Image, WebView, ScrollView, SectionList, Alert
+    View, AsyncStorage, Button,FlatList, Image, WebView, ScrollView, SectionList, Alert, Share, Linking
 } from 'react-native';
 
 import QRCode from 'react-native-qrcode';
@@ -32,6 +32,7 @@ export default class Home extends Component<{}> {
 
     this.seeMyPictures = this.seeMyPictures.bind(this);
     this.deletePicture = this.deletePicture.bind(this);
+    this.sharePicture = this.sharePicture.bind(this);
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
@@ -103,6 +104,19 @@ export default class Home extends Component<{}> {
         }else{
             console.log("vous êtes DECO LA PUTEIN DE VOUS");
         }
+    }
+
+    //TODO:: Ajouter une route coté API return le QRcode => (a mettre sur le bouton linking)
+
+    sharePicture(url_pic){
+        Share.share({
+            message: url_pic, //TODO // add a route in API to send a file and convert into QRcode php and display on share
+            url: url_pic,
+            title: 'Albumz - PC'
+        }, {
+            // Android only:
+            dialogTitle: 'Albumz',
+        })
     }
 
     deletePicture(picture_id){
@@ -219,7 +233,9 @@ export default class Home extends Component<{}> {
                                 fgColor='white'/>
 
                             <Text>{"\n"}</Text>
+                            <Button text="Share this QR code (todo API side a new route converrt a $file into QRcode)" title="QRcode api" onPress={() => Linking.openURL(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`).catch(err => console.error('An occured error', err))}/>
                             <Button title="Delete" onPress={()=>this.deletePicture(item.id)} text="Delete this picture"/>
+                            <Button text="Share this picture" title="sharePic" onPress={() => this.sharePicture(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`)}/>
                         </View>
                     }
                 />

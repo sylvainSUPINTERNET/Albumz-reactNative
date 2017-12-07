@@ -1,4 +1,5 @@
 {
   "name": "AlbumzV2Ejected",
-  "displayName": "AlbumzV2Ejected"
+  "displayName": "AlbumzV2Ejected",
+  "expo": { "sdkVersion": "18.0.0" }
 }
