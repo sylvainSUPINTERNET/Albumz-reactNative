@@ -248,49 +248,51 @@ export default class Upload extends Component<{}> {
                                 //todo: get id ET ajouter ans lalbum (get picture_id from response pour prepare l'ajout picture
                                 //add picture to album
                                 let json = JSON.parse(responseData._bodyText);
-
-                                if(json[0].error === true){
-                                   Alert.alert(json[0].message)
+                                if(self.state.album_choose_name === " "){
+                                    //value default choose
+                                    Alert.alert("Please choose an album !")
                                 }else{
-                                    let picture_id = json[0].picture_id;
-                                    let album_name = self.state.album_choose_name;
+                                    if(json[0].error === true){
+                                        Alert.alert(json[0].message)
+                                    }else{
+                                        let picture_id = json[0].picture_id;
+                                        let album_name = self.state.album_choose_name;
 
-                                    console.log(`add album : ${album_name} the picture ${picture_id}`)
-                                    let data = new FormData();
+                                        console.log(`add album : ${album_name} the picture ${picture_id}`)
+                                        let data = new FormData();
 
-                                    data.append('picture_id', picture_id);
-                                    data.append('album_name', album_name);
+                                        data.append('picture_id', picture_id);
+                                        data.append('album_name', album_name);
 
-                                    const config = {
-                                        method: 'POST',
-                                        headers: {
-                                            'Accept': 'application/json',
-                                            'Content-Type': 'multipart/form-data;',
-                                        },
-                                        body: data,
-                                    };
+                                        const config = {
+                                            method: 'POST',
+                                            headers: {
+                                                'Accept': 'application/json',
+                                                'Content-Type': 'multipart/form-data;',
+                                            },
+                                            body: data,
+                                        };
 
-                                    fetch("http://10.0.2.2:8000/album/picture/add", config)
-                                        .then((responseData) => {
-                                            let json = JSON.parse(responseData._bodyText);
-                                            console.log("PICTURE ADDED IN ALBUM => ", json);
-                                            if(json[0].error === true) {
-                                                Alert.alert(json[0].message);
-                                                console.log("Error added picture into album");
-                                            }else{
-                                                //SUCCESS
-                                                Alert.alert(json[0].message)
-                                            }
-                                        })
-                                        .catch(err => {
-                                            console.log(err);
-                                        })
+                                        fetch("http://10.0.2.2:8000/album/picture/add", config)
+                                            .then((responseData) => {
+                                                let json = JSON.parse(responseData._bodyText);
+                                                console.log("PICTURE ADDED IN ALBUM => ", json);
+                                                if(json[0].error === true) {
+                                                    Alert.alert(json[0].message);
+                                                    console.log("Error added picture into album");
+                                                }else{
+                                                    //SUCCESS
+                                                    Alert.alert(json[0].message)
+                                                }
+                                            })
+                                            .catch(err => {
+                                                console.log(err);
+                                            })
 
 
 
+                                    }
                                 }
-
-
                             })
                             .catch(err => {
                                 console.log(err);
@@ -330,6 +332,7 @@ export default class Upload extends Component<{}> {
                         <Picker
                             selectedValue={this.state.album_choose_name}
                             onValueChange={(itemValue, itemIndex) => this.setState({album_choose_name: itemValue})}>
+                            <Picker.Item label=" " value= " " />
                             {albumItem}
                         </Picker>
 
