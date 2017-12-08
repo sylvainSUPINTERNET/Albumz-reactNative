@@ -70,6 +70,7 @@ export default class Upload extends Component<{}> {
 
         let nbOfPictures = picturesSelected.length;
 
+
         if(nbOfPictures > 0){
             console.log(`il y a ${nbOfPictures} selected`);
             this.setState({
@@ -96,6 +97,10 @@ export default class Upload extends Component<{}> {
             this.setState({
                 message_selected : `${this.state.nb_pictures_selected} photos selectionnées `
             })
+        }
+
+        if(this.state.nb_pictures_selected === 1){
+            Alert.alert("Vous avez déjà une photo séléctioné")
         }
 
 
@@ -327,8 +332,9 @@ export default class Upload extends Component<{}> {
                     <ScrollView style={styles.container}>
                         <Text>Vos photos</Text>
                         <CameraRollPicker
-                            callback={this.getSelectedImages} />
-
+                            callback={this.getSelectedImages}
+                            maximum = {1}
+                            emptyText = "Aucune photo trouvé sur votre téléphone !"/>
                         <Picker
                             selectedValue={this.state.album_choose_name}
                             onValueChange={(itemValue, itemIndex) => this.setState({album_choose_name: itemValue})}>
