@@ -220,12 +220,11 @@ export default class Home extends Component<{}> {
                     renderItem={
                         ({item}) =>
                         <View>
-                            <Text>{item.date_publication}</Text>
+                            <Text>Publié le : {item.date_publication}</Text>
                             <Image style={{width: 150, height: 150}}
                                    source={{uri:`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`}}/>
                             <Text>{"\n"}</Text>
-                            <Text>Share picture</Text>
-                            <Text>{"\n"}</Text>
+                            <Text>QRcode</Text>
                             <QRCode
                                 value={`http://localhost:8000/pictures/${item.name}/display`}
                                 size={200}
@@ -233,9 +232,13 @@ export default class Home extends Component<{}> {
                                 fgColor='white'/>
 
                             <Text>{"\n"}</Text>
-                            <Button text="Share this QR code (todo API side a new route converrt a $file into QRcode)" title="QRcode api" onPress={() => Linking.openURL(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`).catch(err => console.error('An occured error', err))}/>
+                            <Text>Share pictures</Text>
+                            <Button text="See on Web App" title="See picture on web app" onPress={() => Linking.openURL(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`).catch(err => console.error('An occured error', err))}/>
+                            <Button text="Get QRcode" title="See QRCode on web app" onPress={() => Linking.openURL(`http://10.0.2.2:8000/pictures/${item.name}/QRCode/display`).catch(err => console.error('An occured error', err))}/>
+
+                            <Button text="Share this picture" title="sharePic" onPress={() => this.sharePicture(`http://localhost/albumzAPI/var/public/upload/pictures/${item.name}`)}/>
+
                             <Button title="Delete" onPress={()=>this.deletePicture(item.id)} text="Delete this picture"/>
-                            <Button text="Share this picture" title="sharePic" onPress={() => this.sharePicture(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`)}/>
                         </View>
                     }
                 />
