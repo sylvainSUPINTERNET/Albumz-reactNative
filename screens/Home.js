@@ -10,9 +10,27 @@ import {
   StyleSheet,
   Text,
     ImageStore,
-  View, AsyncStorage, Animated, Easing, Settings, Image
+  View, AsyncStorage, Animated, Easing, Settings, Image, Button, Linking
 } from 'react-native';
 
+
+
+
+
+import { Header } from 'react-native-elements';
+
+import { Card } from 'react-native-elements'
+
+
+
+
+import HeaderMenu from './menu/header';
+
+
+import Hyperlink from 'react-native-hyperlink'
+
+
+import StyleElement from './style/style_element';
 
 
 export default class Home extends Component<{}> {
@@ -69,26 +87,67 @@ export default class Home extends Component<{}> {
 
         console.log("YOUR TOKEN : " + this.state.token);
         if(this.state.token !== null){
+            // TODO// header on each page and see why we cant navigate ???
             return (
-                <View style={styles.container}>
-                    <Text>Home page</Text>
-                    <Text>Your token : {this.state.token}</Text>
-                    <Animated.Image
-                        style={{
-                            width: 227,
-                            height: 200,
-                            transform: [{rotate: spin}] }}
-                        source={{uri: 'https://s3.amazonaws.com/media-p.slid.es/uploads/alexanderfarennikov/images/1198519/reactjs.png'}}
+
+                <View>
+                    <Header
+                        leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Albumz', style: { color: '#fff' } }}
+                        rightComponent={{ icon: 'home', color: '#fff' }}
                     />
 
+                        <View>
+                            <Animated.Image
+                                style={{
+                                    width: 100,
+                                    height: 100,
+                                    transform: [{rotate: spin}] }}
+                                source={{uri: 'http://bleach.lyndir.com/roster/img/Interface/Icons/inv_sword_2h_ashbringercorrupt.jpg'}}
+                            />
+                        </View>
+
+                    <Card title="Welcom on Albumz :)">
+                        {
+                        <View>
+                            <Text>Welcom on Albumz application, you are allowed to upload your picture and create your albums. You also can share your albums and pictures to your all friends !</Text>
+                            <Text>Your token : {this.state.token}</Text>
+                        </View>
+
+                        }
+                    </Card>
 
                 </View>
             );
         }else{
             return (
-                <View style={styles.container}>
-                    <Text>Home page</Text>
-                    <Text>Please, go to signup or login before use us app :)</Text>
+                <View>
+                    <Header
+                        leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Albumz', style: { color: '#fff' } }}
+                        rightComponent={{ icon: 'home', color: '#fff' }}
+                    />
+
+                    <View style={{marginTop:20}}>
+                        <Card title="Welcom on Albumz :)">
+                            {
+                                <View>
+                                    <Text>Bienvenue sur Albumz application.</Text>
+                                    <Hyperlink linkDefault={ true }>
+                                        <Text style={ { fontSize: 15 } }>
+                                            Rtrouver Albumz sur votre PC : http://10.0.2.2:8000/.
+                                        </Text>
+                                    </Hyperlink>
+                                </View>
+                            }
+                        </Card>
+                    </View>
+
+
+                    <View style={{padding:10, marginTop:60}}>
+                        <StyleElement choix="button" backgroundColor="#121d42" text="S'authentifier / login" icon='cached' navigation={this.props.navigation} />
+                    </View>
+
                 </View>
             );
         }

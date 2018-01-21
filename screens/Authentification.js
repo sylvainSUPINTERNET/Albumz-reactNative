@@ -16,8 +16,16 @@ import {
     View,
     TextInput,
     Button,
-    AsyncStorage
+    AsyncStorage,
+    KeyboardAvoidingView
 } from 'react-native';
+
+
+
+import {Header} from 'react-native-elements'
+import HeaderMenu from './menu/header';
+
+
 
 
 export default class Authentification extends Component<{}> {
@@ -28,7 +36,7 @@ export default class Authentification extends Component<{}> {
     constructor(props){
         super(props);
         this.state = {
-            token: null
+            token: null,
         }
 
         //set token if user already connected
@@ -107,6 +115,7 @@ export default class Authentification extends Component<{}> {
 
     }
 
+
     login(){
         let data = new FormData();
         data.append('user_firstname', this.state.login_firstname);
@@ -174,16 +183,23 @@ export default class Authentification extends Component<{}> {
 
 
 
+
     render() {
         if(this.state.token !== null) {
-            return (
-                <View>
-                    <Text>You are already connected ! </Text>
-                    <Button title="disconnectd" onPress={this.disconnect} text="Disconnected now"/>
-                </View>
-            );
+                return (
+                    <View>
+                        <Header
+                            leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                            centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
+                            rightComponent={{ icon: 'home', color: '#fff' }}
+                        />
+                        <Button title="Se déconnecter" onPress={this.disconnect} text="Disconnected"/>
+                    </View>
+                );
+
         }else{
             return (
+                
                 <View>
                     <Text>Authentification</Text>
                     <View>
