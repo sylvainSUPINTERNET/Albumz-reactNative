@@ -17,12 +17,17 @@ import {
     TextInput,
     Button,
     AsyncStorage,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    ActivityIndicator
 } from 'react-native';
 
 
 
 import {Header} from 'react-native-elements'
+
+import { Card } from 'react-native-elements'
+
+
 import HeaderMenu from './menu/header';
 
 
@@ -37,7 +42,8 @@ export default class Authentification extends Component<{}> {
         super(props);
         this.state = {
             token: null,
-        }
+            userInfos: null, /* if user is connected thhis state is setted */
+        };
 
         //set token if user already connected
         AsyncStorage.getItem('user_token', (err, token) => {
@@ -53,6 +59,9 @@ export default class Authentification extends Component<{}> {
         this.register = this.register.bind(this);
         this.login = this.login.bind(this);
         this.disconnect = this.disconnect.bind(this);
+
+        //bind correspond à l'envoi du context, on peut très bien ajouter d'autre variable.
+        //Cependant le this toujours en param 1
 
     }
 
@@ -184,8 +193,63 @@ export default class Authentification extends Component<{}> {
 
 
 
+
+
     render() {
+
+        let self = this; //save a copy of variable 'this' (refer to state + method of constructor)
+        fetch(`http://10.0.2.2:8000/user/get/${this.state.token}`)
+            .then((response) => response.json())
+            .then(function(responseJson){
+                if(responseJson[0].error !== true){
+                    self.setState({
+                        userInfos: responseJson[0]
+                    });
+                    console.log("userInfos state", self.state.userInfos)
+                }else{
+                    self.setState({
+                        userInfos: "error"
+                    });
+                    console.log("error usersInfo")
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+
+
+        //ONLY IF DATA ARE LOADED
+        if(this.state.token !== null && this.state.userInfos !== null && this.state.userInfos.error !== 'undefined' && this.state.userInfos.error !== true){
+            return(
+                <View>
+                    <Header
+                        leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
+                        rightComponent={{ icon: 'home', color: '#fff' }}
+                    />
+                    <View style={{marginTop:20}}>
+                        <Card title="Votre profile">
+                            {
+                                <View>
+                                    <Text>Prénom : {this.state.userInfos.firstname}</Text>
+                                    <Text>Nom : {this.state.userInfos.lastname}</Text>
+                                    <Text>Email : {this.state.userInfos.email}</Text>
+                                    <Text>{"\n"}</Text>
+                                    <Button  title="Se déconnecter" onPress={this.disconnect} text="Disconnected"/>
+                                </View>
+                            }
+                        </Card>
+                    </View>
+
+
+                </View>
+            )
+        }
+
+
         if(this.state.token !== null) {
+            console.log("userInfos", this.state.userInfos);
                 return (
                     <View>
                         <Header
@@ -193,14 +257,18 @@ export default class Authentification extends Component<{}> {
                             centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
                             rightComponent={{ icon: 'home', color: '#fff' }}
                         />
-                        <Button title="Se déconnecter" onPress={this.disconnect} text="Disconnected"/>
+                        <ActivityIndicator size="large" color="#0000ff" />
                     </View>
                 );
 
         }else{
             return (
-                
                 <View>
+                    <Header
+                    leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                    centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
+                    rightComponent={{ icon: 'home', color: '#fff' }}
+                />
                     <Text>Authentification</Text>
                     <View>
                         <Text>Register</Text>
