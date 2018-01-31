@@ -36,9 +36,9 @@ export default class HeaderMenu extends Component<{}> {
 
         return(
             <Icon
-                raised
-                name='bars'
-                color='#fff'
+                    raised
+                    name='bars'
+                    color='#fff'
                 onPress={() => this.props.navigation.navigate('DrawerOpen')} />
         )
     }

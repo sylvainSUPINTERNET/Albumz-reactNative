@@ -18,14 +18,13 @@ import {
     Button,
     AsyncStorage,
     KeyboardAvoidingView,
-    ActivityIndicator
+    ActivityIndicator, ScrollView, Alert
 } from 'react-native';
 
 
 
-import {Header} from 'react-native-elements'
+import {Card, FormLabel, FormInput ,FormValidationMessage, Header} from 'react-native-elements'
 
-import { Card } from 'react-native-elements'
 
 
 import HeaderMenu from './menu/header';
@@ -68,11 +67,18 @@ export default class Authentification extends Component<{}> {
     register(){
         console.log("test clicked register");
 
+
         let data = new FormData();
         data.append('user_firstname', this.state.register_firstname);
         data.append('user_lastname', this.state.register_lastname);
         data.append('user_email', this.state.register_email);
         data.append('user_password', this.state.register_password);
+
+        if(!this.state.register_firstname || !this.state.register_lastname || !this.state.register_email  || !this.state.register_password){
+            Alert.alert("Erreur pendant la saisie de vos informations !")
+            return
+        }
+
 
         // Create the config object for the POST
         // You typically have an OAuth2 token that you use for authentication
@@ -103,8 +109,10 @@ export default class Authentification extends Component<{}> {
                     }else{
                         this.setState({
                             error : json[0].message
-                        })
-                        console.log(this.state.error);
+                        });
+                        if(json[0].error === true){
+                            Alert.alert("Register error :", json[0].message)
+                        }
                     }
                 } catch (err) {
                     //if not valid json
@@ -131,6 +139,14 @@ export default class Authentification extends Component<{}> {
         data.append('user_lastname', this.state.login_lastname);
         data.append('user_email', this.state.login_email);
         data.append('user_password', this.state.login_password);
+
+
+
+
+        if(!this.state.login_firstname || !this.state.login_lastname || !this.state.login_email  || !this.state.login_password){
+            Alert.alert("Erreur pendant la saisie de vos informations !")
+            return
+        }
 
         // Create the config object for the POST
         // You typically have an OAuth2 token that you use for authentication
@@ -162,8 +178,11 @@ export default class Authentification extends Component<{}> {
                     }else{
                         this.setState({
                             error : json[0].message
-                        })
-                        console.log(this.state.error);
+                        });
+                        console.log("error login",this.state.error);
+                        if(json[0].error === true){
+                            Alert.alert("login erreur : ", json[0].message)
+                        }
                     }
                 } catch (err) {
                     //if not valid json
@@ -269,59 +288,71 @@ export default class Authentification extends Component<{}> {
                     centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
                     rightComponent={{ icon: 'home', color: '#fff' }}
                 />
-                    <Text>Authentification</Text>
-                    <View>
-                        <Text>Register</Text>
-                        <Text>Firstname</Text>
-                        <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(firstname) => this.setState({register_firstname: firstname.replace(/[0-9]/g, '')})}
-                        />
-                        <Text>Lastname</Text>
-                        <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(lastname) => this.setState({register_lastname: lastname.replace(/[0-9]/g, '')})}
-                        />
-                        <Text>Email</Text>
-                        <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(email) => this.setState({register_email: email})}
-                        />
-                        <Text>Password</Text>
-                        <TextInput
-                            secureTextEntry={true}
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(password) => this.setState({register_password: password})}
-                        />
-                        <Button title="register" onPress={this.register} text="Register now !"/>
-                    </View>
+                        <ScrollView>
 
-                    <View>
-                        <Text>Login</Text>
-                        <Text>Firstname</Text>
-                        <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(firstname) => this.setState({login_firstname: firstname})}
-                        />
-                        <Text>Lastname</Text>
-                        <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(lastname) => this.setState({login_lastname: lastname})}
-                        />
-                        <Text>Email</Text>
-                        <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(email) => this.setState({login_email: email})}
-                        />
-                        <Text>Password</Text>
-                        <TextInput
-                            secureTextEntry={true}
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                            onChangeText={(password) => this.setState({login_password: password})}
-                        />
-                        <Button title="login" onPress={this.login} text="Login now !"/>
-                    </View>
+                            <Card title="Register">
+                                <FormLabel>Prénom</FormLabel>
+                                <FormInput
+                                    onChangeText={(firstname) => this.setState({register_firstname: firstname.replace(/[0-9]/g, '')})} >
+                                </FormInput>
+
+
+                                <FormLabel>Nom</FormLabel>
+                                <FormInput
+                                    onChangeText={(lastname) => this.setState({register_lastname: lastname.replace(/[0-9]/g, '')})} >
+                                </FormInput>
+
+
+
+                                <FormLabel>Email</FormLabel>
+                                <FormInput
+                                    onChangeText={(email) => this.setState({register_email: email})} >
+                                </FormInput>
+
+
+
+                                <FormLabel>Password</FormLabel>
+                                <FormInput
+                                    onChangeText={(password) => this.setState({register_password: password})} >
+                                </FormInput>
+
+                                <Button title="register" onPress={this.register} text="Register now !"/>
+                            </Card>
+
+
+                            <Card title="Login">
+                                <FormLabel>Prénom</FormLabel>
+                                <FormInput
+                                    onChangeText={(firstname) => this.setState({login_firstname: firstname})} >
+                                </FormInput>
+
+
+                                <FormLabel>Nom</FormLabel>
+                                <FormInput
+                                    onChangeText={(lastname) => this.setState({login_lastname: lastname})} >
+                                </FormInput>
+
+                                <FormLabel>Email</FormLabel>
+                                <FormInput
+                                    onChangeText={(email) => this.setState({login_email: email})} >
+                                </FormInput>
+
+                                <FormLabel>Password</FormLabel>
+                                <FormInput
+                                    onChangeText={(password) => this.setState({login_password: password})} >
+                                </FormInput>
+
+                                <Button title="login" onPress={this.login} text="Login now !"/>
+                            </Card>
+
+                            <Text>{"\n"}</Text>
+                            <Text>{"\n"}</Text>
+                            <Text>{"\n"}</Text>
+
+                        </ScrollView>
                 </View>
+
+
             );
         }
     }
