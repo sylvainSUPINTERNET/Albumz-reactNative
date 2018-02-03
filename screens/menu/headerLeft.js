@@ -9,23 +9,15 @@
 
 import React, { Component } from 'react';
 
+import {
+    Text,View
+} from 'react-native';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-/*
-const HeaderMenu = ({ }) => (
-    <Icon
-        raised
-        name='dots-three-vertical'
-        color='#f50'
-        onPress={() => this.props.navi.navigate('OpenDrawer')} />
-);
 
-export default HeaderMenu
-*/
-
-
-export default class HeaderMenu extends Component<{}> {
+export default class HeaderLeft extends Component<{}> {
     constructor(props){
         super(props);
 
@@ -43,3 +35,12 @@ export default class HeaderMenu extends Component<{}> {
         )
     }
 }
+
+
+
+
+
+
+
+
+

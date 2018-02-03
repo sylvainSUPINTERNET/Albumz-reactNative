@@ -24,10 +24,14 @@ export default {
         //fontcolor: "darkblue"
     },
     logo: {
-        justifyContent: 'center',
         width: 150,
         height: 150,
-        paddingLeft: 30,
-        alignItems: 'center',
+    },
+
+
+    centerContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 };

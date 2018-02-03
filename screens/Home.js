@@ -24,8 +24,8 @@ import { Card } from 'react-native-elements'
 
 
 
-import HeaderMenu from './menu/header';
-
+import HeaderLeft from './menu/headerLeft';
+import HeaderRight from './menu/headerRight';
 
 import Hyperlink from 'react-native-hyperlink'
 
@@ -92,9 +92,9 @@ export default class Home extends Component<{}> {
 
                 <View>
                     <Header
-                        leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
                         centerComponent={{ text: 'Albumz', style: { color: '#fff' } }}
-                        rightComponent={{ icon: 'home', color: '#fff' }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
                     />
 
                         <View>
@@ -123,9 +123,9 @@ export default class Home extends Component<{}> {
             return (
                 <View>
                     <Header
-                        leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
                         centerComponent={{ text: 'Albumz', style: { color: '#fff' } }}
-                        rightComponent={{ icon: 'home', color: '#fff' }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
                     />
 
                     <View style={{marginTop:20}}>

@@ -5,9 +5,12 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import styles from './sideMenu.style';
 import {NavigationActions} from 'react-navigation';
-import {ScrollView, Text, View, Image} from 'react-native';
+import {ScrollView, Text, View, Image, Button} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+import Hyperlink from 'react-native-hyperlink'
 
 
 class SideMenu extends Component {
@@ -22,7 +25,7 @@ class SideMenu extends Component {
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <View style={{backgroundColor: 'whitesmoke'}}>
+                    <View style={styles.centerContainer}>
                         <Image style={styles.logo}
                                source={require('../../assets/logo.png')}
                         />
@@ -32,10 +35,6 @@ class SideMenu extends Component {
                         <View style={styles.navSectionStyle}>
                             <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Home')}>
                                 Home
-                                <Icon
-                                raised
-                                name='bars'
-                                color='black'/>
                             </Text>
                         </View>
                         <View style={styles.navSectionStyle}>
@@ -64,10 +63,14 @@ class SideMenu extends Component {
                     </View>
                 </ScrollView>
                 <View style={styles.footerContainer}>
-                    <Text>Nous soutenir ? c'est ici !</Text>
+                    <Button text="Nous soutenir" title="Nous soutenir" onPress={() => console.log("change by logo here + action load Link http://10.0.2.2:3000")}/>
                     <View>
-                        <Text>Nous contacter ?</Text>
-                        <Text>sylvain.joly@supinternet.fr | 0642561130</Text>
+                        <Text style={{color: 'blue'}}>sylvain.joly@supinternet.fr | 0642561130</Text>
+                        <Hyperlink linkDefault={ true }>
+                            <Text style={ { fontSize: 15 } }>
+                                App Web : http://10.0.2.2:8000/.
+                            </Text>
+                        </Hyperlink>
                     </View>
                 </View>
             </View>

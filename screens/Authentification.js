@@ -27,7 +27,9 @@ import {Card, FormLabel, FormInput ,FormValidationMessage, Header} from 'react-n
 
 
 
-import HeaderMenu from './menu/header';
+import HeaderLeft from './menu/headerLeft';
+import HeaderRight from './menu/headerRight';
+
 
 
 
@@ -243,9 +245,9 @@ export default class Authentification extends Component<{}> {
             return(
                 <View>
                     <Header
-                        leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
                         centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
-                        rightComponent={{ icon: 'home', color: '#fff' }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
                     />
                     <View style={{marginTop:20}}>
                         <Card title="Votre profile">
@@ -272,9 +274,9 @@ export default class Authentification extends Component<{}> {
                 return (
                     <View>
                         <Header
-                            leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                            leftComponent={<HeaderLeft navigation={this.props.navigation} />}
                             centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
-                            rightComponent={{ icon: 'home', color: '#fff' }}
+                            rightComponent={<HeaderRight navigation={this.props.navigation} />}
                         />
                         <ActivityIndicator size="large" color="#0000ff" />
                     </View>
@@ -284,9 +286,9 @@ export default class Authentification extends Component<{}> {
             return (
                 <View>
                     <Header
-                    leftComponent={<HeaderMenu navigation={this.props.navigation} />}
+                    leftComponent={<HeaderLeft navigation={this.props.navigation} />}
                     centerComponent={{ text: 'Authentification', style: { color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}
+                    rightComponent={<HeaderRight navigation={this.props.navigation} />}
                 />
                         <ScrollView>
 
