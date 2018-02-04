@@ -5,12 +5,15 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import styles from './sideMenu.style';
 import {NavigationActions} from 'react-navigation';
-import {ScrollView, Text, View, Image, Button} from 'react-native';
+import {ScrollView, Text, View, Image, Button, Linking  } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 import Hyperlink from 'react-native-hyperlink'
+
+import { SocialIcon, Divider } from 'react-native-elements'
+
 
 
 class SideMenu extends Component {
@@ -60,18 +63,57 @@ class SideMenu extends Component {
                                 Album Creation
                             </Text>
                         </View>
+
+                        <View style={styles.navSectionStyle} >
+                            <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, flexDirection: 'row', paddingTop: 35}}>
+                                <SocialIcon
+                                    raised={false}
+                                    type='github'
+                                    iconSize={35}
+                                    onPress={
+                                        () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
+                                            if (!supported) {
+                                                console.log('error supported')
+                                            } else {
+                                                return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
+                                            }
+                                        }).catch(err => console.error('An error occurred', err))
+                                    }
+                                />
+                                <SocialIcon
+                                    raised={false}
+                                    type='gitlab'
+                                    iconSize={35}
+                                    onPress={
+                                        () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
+                                            if (!supported) {
+                                                console.log('error supported')
+                                            } else {
+                                                return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
+                                            }
+                                        }).catch(err => console.error('An error occurred', err))
+                                    }
+                                />
+                                <SocialIcon
+                                    raised={false}
+                                    type='instagram'
+                                    iconSize={35}
+                                    onPress={
+                                        () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
+                                            if (!supported) {
+                                                console.log('error supported')
+                                            } else {
+                                                return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
+                                            }
+                                        }).catch(err => console.error('An error occurred', err))
+                                    }
+                                />
+                            </View>
+                        </View>
                     </View>
                 </ScrollView>
                 <View style={styles.footerContainer}>
                     <Button text="Nous soutenir" title="Nous soutenir" onPress={() => console.log("change by logo here + action load Link http://10.0.2.2:3000")}/>
-                    <View>
-                        <Text style={{color: 'blue'}}>sylvain.joly@supinternet.fr | 0642561130</Text>
-                        <Hyperlink linkDefault={ true }>
-                            <Text style={ { fontSize: 15 } }>
-                                App Web : http://10.0.2.2:8000/.
-                            </Text>
-                        </Hyperlink>
-                    </View>
                 </View>
             </View>
         );

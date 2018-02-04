@@ -9,10 +9,21 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage, Button,FlatList, Image, WebView, ScrollView, SectionList, Alert, Share, Linking
+    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, Share, Linking
 } from 'react-native';
 
 import QRCode from 'react-native-qrcode';
+
+import { Header, Card, Button, Tile } from 'react-native-elements';
+
+import HeaderLeft from './menu/headerLeft';
+import HeaderRight from './menu/headerRight';
+
+
+import StyleElement from './style/style_element';
+
+
+
 
 
 export default class Home extends Component<{}> {
@@ -203,9 +214,24 @@ export default class Home extends Component<{}> {
     render() {
         if(this.state.token !== null && this.state.displayPictures === false){
             return (
-                <View style={styles.container}>
-                    <Text>Your pictures uploaded</Text>
-                    <Button title="seeMyPictures" onPress={this.seeMyPictures} text="Show my pictures"/>
+                <View>
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Vos photos', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                    />
+                    <View>
+                        <Tile
+                            imageSrc={{require: ('./assets/are_you_sure_about_that.jpg')}}
+                            title="Vous êtes sur le point d'accèder à votre gallerie photos "
+                            contentContainerStyle={{height: 160}}>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20}}>
+                                <Button                   icon={{name: 'times', type: 'font-awesome'}}  // optional
+                                                                    backgroundColor="#CF000F" borderRadius={10} title="Annuler" onPress={() => this.props.navigation.navigate('Home')} text="Back"/>
+                                <Button  icon={{name: 'check', type: 'font-awesome'}} backgroundColor="#008080" borderRadius={10}  title="Accéder" onPress={this.seeMyPictures} text="Pictures gallery"/>
+                            </View>
+                        </Tile>
+                    </View>
                 </View>
             );
         }else if(this.state.pictures !== null && this.state.displayPictures === true){
@@ -215,6 +241,11 @@ export default class Home extends Component<{}> {
 
             return(
             <ScrollView>
+                <Header
+                    leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                    centerComponent={{ text: 'Vos photos', style: { color: '#fff' } }}
+                    rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                />
                 <FlatList
                     data={this.state.json_pictures}
                     renderItem={
@@ -246,8 +277,28 @@ export default class Home extends Component<{}> {
                 );
         } else{
             return (
-                <View style={styles.container}>
-                    <Text>No account or not connected ? let's start go to Authentification ! :)</Text>
+                <View>
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Vos photos (non connecté)', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                    />
+
+                    <View style={{marginTop:20}}>
+                        <Card title="Voir vos photo">
+                            {
+                                <View>
+                                    <Text>Pour consulter vos images uploadé à volonté, veuillez vous authentifier</Text>
+                                </View>
+                            }
+                        </Card>
+                    </View>
+
+
+                    <View style={{padding:10, marginTop:60}}>
+                        <StyleElement choix="button" backgroundColor="#121d42" text="S'authentifier / login" icon='cached' navigation={this.props.navigation} />
+                    </View>
+
                 </View>
             );
         }

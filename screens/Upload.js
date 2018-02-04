@@ -6,10 +6,23 @@
 
 import React, { Component } from 'react';
 import {
-  StyleSheet, View, Button, Text, ScrollView, AsyncStorage, Alert, Vibration, Picker
+  StyleSheet, View, Text, ScrollView, AsyncStorage, Alert, Vibration, Picker
 } from 'react-native';
 
 import CameraRollPicker from 'react-native-camera-roll-picker';
+
+import {Card, FormLabel, FormInput ,FormValidationMessage, Header} from 'react-native-elements'
+
+
+import StyleElement from './style/style_element';
+
+import HeaderLeft from './menu/headerLeft';
+import HeaderRight from './menu/headerRight';
+
+
+import { Button } from 'react-native-elements'
+
+
 
 
 // IMPORTANT, if you used Emulator dont forget to take some pics ! .....
@@ -37,7 +50,7 @@ export default class Upload extends Component<{}> {
             token: "",
             pictures: "", // array d'objet comprenant object => image : { uri height width }
             nb_pictures_selected: 0,
-            message_selected: "Veuillez sélectionner les photos pour votre albumz ",
+            message_selected: "",
 
 
             album_selected: null, // json response from api
@@ -321,33 +334,62 @@ export default class Upload extends Component<{}> {
   render() {
 
             //todo : fixed bug (if only one album, the value is consider as no album selected
+      console.log("albums",     this.state.album_selected_array)
                let albumItem = this.state.album_selected_array.map( (album_name, i) => {
                     return <Picker.Item key={i} value={album_name} label={album_name} />
                 });
+      if(this.state.token !== null){
+          return (
+              <ScrollView style={styles.container}>
+                  <Header
+                      leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                      centerComponent={{ text: 'Vos photos', style: { color: '#fff' } }}
+                      rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                  />
+                  <CameraRollPicker
+                      callback={this.getSelectedImages}
+                      maximum = {1}
+                      emptyText = "Aucune photo trouvé sur votre téléphone !"/>
+                  <Picker        itemStyle={{ backgroundColor: 'lightgrey', marginLeft: 0, paddingLeft: 15 }}
+                                 itemTextStyle={{ fontSize: 18, color: 'black' }}
+                          selectedValue={this.state.album_choose_name}
+                      onValueChange={(itemValue, itemIndex) => this.setState({album_choose_name: itemValue})}>
+                      <Picker.Item label=" " value= " "/>
+                      {albumItem}
+                  </Picker>
+
+                  <View style={{flex:2}}>
+                      <Text style={{paddingLeft: 10, color: 'red', fontSize: 16}}>{this.state.message_selected}</Text>
+                      <Button text="Upload" title="Upload" onPress={this.upload} borderRadius={10} backgroundColor="#008080" fontSize={16}/>
+                  </View>
+              </ScrollView>
+          );
+      }else{
+          return (
+              <View>
+                  <Header
+                      leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                      centerComponent={{ text: 'Vos photos (non connecté)', style: { color: '#fff' } }}
+                      rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                  />
+
+                  <Card title="Uploader vos photos à volonter !">
+                      {
+                          <View>
+                                <Text>Afin de profiter de la fonctionnalité "Uploader votre photo", vous devez d'abord vous connecter</Text>
+                              <View style={{padding:10, marginTop:60}}>
+                                  <StyleElement choix="button" backgroundColor="#121d42" text="S'authentifier / login" icon='cached' navigation={this.props.navigation} />
+                              </View>
+                          </View>
+
+                      }
+                  </Card>
+              </View>
+          )
+
+      }
 
 
-            //todo: faire la gestion d'erreur (pas connecté, array album empty (juste display go create album), et affichage classique album list + picture)
-                return (
-
-                    <ScrollView style={styles.container}>
-                        <Text>Vos photos</Text>
-                        <CameraRollPicker
-                            callback={this.getSelectedImages}
-                            maximum = {1}
-                            emptyText = "Aucune photo trouvé sur votre téléphone !"/>
-                        <Picker
-                            selectedValue={this.state.album_choose_name}
-                            onValueChange={(itemValue, itemIndex) => this.setState({album_choose_name: itemValue})}>
-                            <Picker.Item label=" " value= " " />
-                            {albumItem}
-                        </Picker>
-
-                        <View style={{flex:2}}>
-                            <Text>{this.state.message_selected}</Text>
-                            <Button text="Upload" title="Upload your selected pictures" onPress={this.upload}/>
-                        </View>
-                    </ScrollView>
-                );
 
   }
 }

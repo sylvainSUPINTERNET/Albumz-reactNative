@@ -19,7 +19,8 @@ export default {
         //backgroundColor: 'ligthblue'
     },
     footerContainer: {
-        padding: 20,
+        padding: 15,
+        paddingBottom: 20,
         backgroundColor: '#f5f5f5',
         //fontcolor: "darkblue"
     },
