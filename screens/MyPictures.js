@@ -9,18 +9,20 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, Share, Linking
+    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, Share, Linking, TouchableHighlight, TouchableOpacity
 } from 'react-native';
 
 import QRCode from 'react-native-qrcode';
 
-import { Header, Card, Button, Tile } from 'react-native-elements';
+import { Header, Card, Button, Tile, Icon } from 'react-native-elements';
 
 import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
 
 
 import StyleElement from './style/style_element';
+
+import Moment from 'moment';
 
 
 
@@ -39,6 +41,7 @@ export default class Home extends Component<{}> {
             token: null,
             pictures: null,
             displayPictures: false,
+            isVisible: false,
         };
 
     this.seeMyPictures = this.seeMyPictures.bind(this);
@@ -246,32 +249,61 @@ export default class Home extends Component<{}> {
                     centerComponent={{ text: 'Vos photos', style: { color: '#fff' } }}
                     rightComponent={<HeaderRight navigation={this.props.navigation} />}
                 />
+
                 <FlatList
                     data={this.state.json_pictures}
+                    keyExtractor={(item, index) => index}
                     renderItem={
                         ({item}) =>
-                        <View>
-                            <Text>Publié le : {item.date_publication}</Text>
-                            <Image style={{width: 150, height: 150}}
-                                   source={{uri:`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`}}/>
+                        <Card title="TODO => name pic + catégorie">
+                                <Text style={{textAlign:'center', fontSize:16 ,fontWeight: 'bold'}} icon={{name: 'clock', type: 'font-awesome'}}  >
+                                    {Moment(item.date_publication).format('DD-MM-YYYY à hh:mm')}
+                                </Text>
+                            <View style={{alignItems: 'center', justifyContent:'space-between', flex: 1, flexDirection: 'row', paddingTop: 35}}>
+                                    <Image style={{width: 150, height: 150}}
+                                           source={{uri:`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`}}
+                                           resizeMode="cover"
+                                    />
+                                <QRCode
+                                    value={`http://localhost:8000/pictures/${item.name}/display`}
+                                    size={150}
+                                    bgColor='purple'
+                                    fgColor='white'/>
+                            </View>
                             <Text>{"\n"}</Text>
-                            <Text>QRcode</Text>
-                            <QRCode
-                                value={`http://localhost:8000/pictures/${item.name}/display`}
-                                size={200}
-                                bgColor='purple'
-                                fgColor='white'/>
+                                <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, flexDirection: 'row', paddingTop: 35}}>
+                                    <TouchableOpacity style={{padding: 10}} onPress={() => Linking.openURL(`http://10.0.2.2:8000/pictures/${item.name}/QRCode/display`).catch(err => console.error('An occured error', err))}>
+                                        <Icon
+                                            name='filter-center-focus'
+                                            color='#7f8c8d'
+                                            size={60}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{padding: 10}} onPress={() => this.sharePicture(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`)}>
+                                        <Icon
+                                            name='send'
+                                            color='#2980b9'
+                                            size={60}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{padding:10}} onPress={() => Linking.openURL(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`).catch(err => console.error('An occured error', err))}>
+                                        <Icon
+                                            name='dvr'
+                                            color='#2c3e50'
+                                            size={60}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{paddingLeft: 35}} onPress={()=>this.deletePicture(item.id)}>
+                                        <Icon
+                                            name='delete'
+                                            color='#c0392b'
+                                            size={60}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
 
-                            <Text>{"\n"}</Text>
-                            <Text>Share pictures</Text>
-                            <Button text="See on Web App" title="See picture on web app" onPress={() => Linking.openURL(`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`).catch(err => console.error('An occured error', err))}/>
-                            <Button text="Get QRcode" title="See QRCode on web app" onPress={() => Linking.openURL(`http://10.0.2.2:8000/pictures/${item.name}/QRCode/display`).catch(err => console.error('An occured error', err))}/>
-
-                            <Button text="Share this picture" title="sharePic" onPress={() => this.sharePicture(`http://localhost/albumzAPI/var/public/upload/pictures/${item.name}`)}/>
-
-                            <Button title="Delete" onPress={()=>this.deletePicture(item.id)} text="Delete this picture"/>
-                        </View>
-                    }
+                        </Card>
+                            }
                 />
             </ScrollView>
                 );
