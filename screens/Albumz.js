@@ -365,7 +365,7 @@ export default class Albumz extends Component<{}> {
                         renderItem={
                             ({item}) =>
                                 <View>
-                                    <Card title="Name of pic to do !!">
+                                    <Card title={item.label}>
                                         <View   style={{justifyContent: 'center',
                                             alignItems: 'center',}}>
                                             <Image style={{width: 150, height: 150}}
@@ -382,6 +382,9 @@ export default class Albumz extends Component<{}> {
                                                 size={45}
                                             />
                                         </TouchableOpacity>
+                                        <View>
+                                            <Text style={{textAlign: 'right'}}>Catégorie : {item.category}</Text>
+                                        </View>
                                     </Card>
                                 </View>
                         }

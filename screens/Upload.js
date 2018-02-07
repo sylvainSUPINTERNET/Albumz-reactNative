@@ -11,7 +11,7 @@ import {
 
 import CameraRollPicker from 'react-native-camera-roll-picker';
 
-import {Card, FormLabel, FormInput ,FormValidationMessage, Header} from 'react-native-elements'
+import {Card, FormLabel, FormInput , Header, Button} from 'react-native-elements'
 
 
 import StyleElement from './style/style_element';
@@ -20,7 +20,6 @@ import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
 
 
-import { Button } from 'react-native-elements'
 
 
 
@@ -56,6 +55,8 @@ export default class Upload extends Component<{}> {
             album_selected: null, // json response from api
             album_selected_array: [], //convert to array of name of album (for picker)
             album_choose_name: "", //choose album name selected from picker
+            picture_label: "",
+            picture_category: "",
         };
 
 
@@ -248,6 +249,9 @@ export default class Upload extends Component<{}> {
                         data.append('picture_user_token', id_from_token);
 
 
+                        data.append('picture_label', this.state.picture_label.toString())
+                        data.append('picture_category',  this.state.picture_category.toString())
+
                         // Create the config object for the POST
                         // You typically have an OAuth2 token that you use for authentication
                         const config = {
@@ -357,6 +361,11 @@ export default class Upload extends Component<{}> {
                       <Picker.Item label=" " value= " "/>
                       {albumItem}
                   </Picker>
+                  <FormLabel>Label de la photo</FormLabel>
+                  <FormInput onChangeText={(labelPic) => this.setState({picture_label: labelPic})}/>
+
+                  <FormLabel>Catégory</FormLabel>
+                  <FormInput onChangeText={(categoryPic) => this.setState({picture_category: categoryPic})}/>
 
                   <View style={{flex:2}}>
                       <Text style={{paddingLeft: 10, color: 'red', fontSize: 16}}>{this.state.message_selected}</Text>

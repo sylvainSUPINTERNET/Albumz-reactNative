@@ -255,7 +255,7 @@ export default class Home extends Component<{}> {
                     keyExtractor={(item, index) => index}
                     renderItem={
                         ({item}) =>
-                        <Card title="TODO => name pic + catégorie">
+                        <Card title={item.label}>
                                 <Text style={{textAlign:'center', fontSize:16 ,fontWeight: 'bold'}} icon={{name: 'clock', type: 'font-awesome'}}  >
                                     {Moment(item.date_publication).format('DD-MM-YYYY à hh:mm')}
                                 </Text>
@@ -300,8 +300,11 @@ export default class Home extends Component<{}> {
                                             size={60}
                                         />
                                     </TouchableOpacity>
-                                </View>
 
+                        </View>
+                        <View>
+                            <Text style={{textAlign: 'right'}}>Catégorie : {item.category}</Text>
+                        </View>
                         </Card>
                             }
                 />
