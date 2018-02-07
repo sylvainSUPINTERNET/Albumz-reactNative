@@ -9,8 +9,22 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage, Button,FlatList, Image, WebView, ScrollView, SectionList, Alert
+    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, TouchableOpacity
 } from 'react-native';
+
+
+import HeaderLeft from './menu/headerLeft';
+import HeaderRight from './menu/headerRight';
+
+import Hyperlink from 'react-native-hyperlink'
+
+
+import StyleElement from './style/style_element';
+
+import { Header, Card, Button, Icon } from 'react-native-elements';
+
+import Moment from 'moment';
+
 
 export default class Albumz extends Component<{}> {
     static navigationOptions = {
@@ -261,8 +275,32 @@ export default class Albumz extends Component<{}> {
         if(this.state.token !== null && this.state.displayAlbums === false){
             return(
                 <View>
-                    <Text>Gestionnaire d'albumz</Text>
-                    <Button text="See more" title="see my albums" onPress={this.getAlbums}/>
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'My albums', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                    />
+                    <Card title="Acceder au gestionnaire d'albums">
+                        {
+                            <View>
+                                <Text>Vous pouvez accéder à vos albums créer ici, et ainsi consulter chaque photos qu'il contient !</Text>
+                                <Text>{"\n"}</Text>
+                                <Text>Pas encore d'album ?</Text>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateAlbum')}>
+                                    <Text style={{color: 'blue'}}>Cliquez ici</Text>
+                                </TouchableOpacity>
+                                <Text>{"\n"}</Text>
+                                    <TouchableOpacity onPress={this.getAlbums}>
+                                        <Icon
+                                            name='arrow-forward'
+                                            color='#c0392b'
+                                            size={60}
+                                        />
+                                    </TouchableOpacity>
+                            </View>
+
+                        }
+                    </Card>
                 </View>
             )
         }else if(this.state.token !== null && this.state.displayAlbums === true && this.state.displayPicturesForAlbum === false)
@@ -270,20 +308,41 @@ export default class Albumz extends Component<{}> {
             return(
                 <View>
                     <ScrollView>
+                        <Header
+                            leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                            centerComponent={{ text: 'My albums', style: { color: '#fff' } }}
+                            rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                        />
                         <FlatList
                             data={this.state.albums}
+                            keyExtractor={(item, index) => index}
                             renderItem={
                                 ({item}) =>
-                                    <View>
-                                        <Text>{item.name}</Text>
+                                    <Card title={item.name}>
                                         <Text>{"\n"}</Text>
-                                        <Text>{item.description}</Text>
+                                        <Text style={{fontSize: 16, textAlign: "justify"}}>{item.description}</Text>
                                         <Text>{"\n"}</Text>
-                                        <Text>{item.album_date_creation}</Text>
+                                        <Text style={{textAlign:'right', fontSize:12 ,fontWeight: 'bold'}} icon={{name: 'clock', type: 'font-awesome'}}  >
+                                            {Moment(item.album_date_creation).format('DD-MM-YYYY à hh:mm')}
+                                        </Text>
                                         <Text>{"\n"}</Text>
-                                        <Button title="Delete" onPress={()=>this.deleteAlbum(item.album_id)} text="Delete this album"/>
-                                        <Button text="Display pictures" title="See picture of this albums" onPress={()=>this.displayPicture(item.album_id)}/>
-                                    </View>
+                                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: 30}}>
+                                            <TouchableOpacity onPress={()=>this.displayPicture(item.album_id)}>
+                                                <Icon
+                                                    name='input'
+                                                    color='#2c3e50'
+                                                    size={45}
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={()=>this.deleteAlbum(item.album_id)}>
+                                                <Icon
+                                                    name='close'
+                                                    color='#c0392b'
+                                                    size={45}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </Card>
                             }
                         />
                     </ScrollView>
@@ -294,24 +353,42 @@ export default class Albumz extends Component<{}> {
             console.log(this.state.pictureList);
            return(
             <View>
-                <Text>Display picture for this album</Text>
                 <ScrollView>
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'My albums', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                    />
                     <FlatList
                         data={this.state.pictureList}
+                        keyExtractor={(item, index) => index}
                         renderItem={
                             ({item}) =>
                                 <View>
-                                    <Text>{"\n"}</Text>
-                                    <Image style={{width: 150, height: 150}}
-                                           source={{uri:`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.picture_name}`}}/>
-                                    <Text>{"\n"}</Text>
-                                    <Text>{item.date_publicatio}</Text>
-                                    <Button text="delete picture for album" title="delete picture for album" onPress={() => this.deletePicFromAlbum(item.picture_id) /* todo delete pic with this album use my route */}/>
-                                    <Text>{"\n"}</Text>
+                                    <Card title="Name of pic to do !!">
+                                        <View   style={{justifyContent: 'center',
+                                            alignItems: 'center',}}>
+                                            <Image style={{width: 150, height: 150}}
+                                                   source={{uri:`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.picture_name}`}}/>
+                                        </View>
+                                        <Text>{"\n"}</Text>
+                                        <Text style={{textAlign:'right', fontSize:12 ,fontWeight: 'bold'}} icon={{name: 'clock', type: 'font-awesome'}}  >
+                                            {Moment(item.date_publication).format('DD-MM-YYYY à hh:mm')}
+                                        </Text>
+                                        <TouchableOpacity onPress={() => this.deletePicFromAlbum(item.picture_id)} >
+                                            <Icon
+                                                name='close'
+                                                color='#c0392b'
+                                                size={45}
+                                            />
+                                        </TouchableOpacity>
+                                    </Card>
                                 </View>
                         }
                     />
-                    <Button text="Fermer" title="back to album list" onPress={() => this.setState({displayPicturesForAlbum: false, pictureList: null, current_id_album:null})}/>
+                    <Text>{"\n"}</Text>
+                    <Button text="Fermer" title="Back to albums" borderRadius={10} backgroundColor="#008080" fontSize={16} onPress={() => this.setState({displayPicturesForAlbum: false, pictureList: null, current_id_album:null})}/>
+                    <Text>{"\n"}</Text>
                 </ScrollView>
             </View>
            )
@@ -319,7 +396,22 @@ export default class Albumz extends Component<{}> {
         else{
             return(
                 <View>
-                    <Text>Vous n'est pas connecté</Text>
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'My albums (non connecté)', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                    />
+                    <Card title="Regarder vos albums !">
+                        {
+                            <View>
+                                <Text>Afin de profiter de cette fonctionnalité, vous devez d'abord vous identifier !</Text>
+                                <View style={{padding:10, marginTop:60}}>
+                                    <StyleElement choix="button" backgroundColor="#121d42" text="S'authentifier / login" icon='cached' navigation={this.props.navigation} />
+                                </View>
+                            </View>
+
+                        }
+                    </Card>
                 </View>
             )
         }

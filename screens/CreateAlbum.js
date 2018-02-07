@@ -9,8 +9,20 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage, Button,FlatList, Image, WebView, ScrollView, SectionList, Alert, TextInput
+    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, TextInput
 } from 'react-native';
+
+import HeaderLeft from './menu/headerLeft';
+import HeaderRight from './menu/headerRight';
+
+import Hyperlink from 'react-native-hyperlink'
+
+
+import StyleElement from './style/style_element';
+
+import { Header, Card, Button, Icon, FormLabel, FormInput } from 'react-native-elements';
+
+import Moment from 'moment';
 
 export default class CreateAlbum extends Component<{}> {
     static navigationOptions = {
@@ -91,24 +103,44 @@ export default class CreateAlbum extends Component<{}> {
         if(this.state.token !== null){
             return(
                 <View>
-                    <Text>Creer un album</Text>
-                    <Text>Name</Text>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(name) => this.setState({album_name: name})}
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Crée un album', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
                     />
-                    <Text>Description</Text>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(description) => this.setState({album_description: description})}
-                    />
-                    <Button text="Add album" title="create album" onPress={this.addAlbum}/>
+
+                    <Card title="Ajouter un album">
+                            <FormLabel>Nom de l'album</FormLabel>
+                            <FormInput onChangeText={(name) => this.setState({album_name: name})}/>
+
+                            <FormLabel>Description</FormLabel>
+                            <FormInput onChangeText={(description) => this.setState({album_description: description})}/>
+                        <Text>{"\n"}</Text>
+                            <Button backgroundColor={'#2ed573'} borderRadius={5} icon={{name: 'check', type: 'font-awesome'}} text="Ajouter" title="Ajouter" onPress={this.addAlbum}/>
+                        <Text>{"\n"}</Text>
+                    </Card>
+
                 </View>
             )
         }else{
             return(
                 <View>
-                    <Text>Vous n'est pas connecté</Text>
+                    <Header
+                        leftComponent={<HeaderLeft navigation={this.props.navigation} />}
+                        centerComponent={{ text: 'Crée un album (non connecté)', style: { color: '#fff' } }}
+                        rightComponent={<HeaderRight navigation={this.props.navigation} />}
+                    />
+                    <Card title="Crée un album sur Albumz">
+                        {
+                            <View>
+                                <Text>Afin de profiter de cette fonctionnalité, vous devez d'abord vous identifier !</Text>
+                                <View style={{padding:10, marginTop:60}}>
+                                    <StyleElement choix="button" backgroundColor="#121d42" text="S'authentifier / login" icon='cached' navigation={this.props.navigation} />
+                                </View>
+                            </View>
+
+                        }
+                    </Card>
                 </View>
             )
         }
