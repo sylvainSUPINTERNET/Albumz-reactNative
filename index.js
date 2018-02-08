@@ -10,7 +10,11 @@ import Authentification from './screens/Authentification';
 import MyPictures from './screens/MyPictures';
 import Albumz from './screens/Albumz';
 import CreateAlbum from './screens/CreateAlbum';
+import Search from './screens/Search';
+
+
 import SideMenu from './screens/menu/sideMenu';
+
 
 //faire le logout (check if one key user_token is not empty in storage
 //if not empty => user is connected so display the button "logout" into the menu and create a method to remove th keyItem
@@ -35,6 +39,9 @@ const drawerMenu = DrawerNavigator({
     CreateAlbum:{
         screen: CreateAlbum
     },
+    Search: {
+        screen: Search
+    }
 
 
 }, {

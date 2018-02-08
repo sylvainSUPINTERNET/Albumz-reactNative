@@ -64,56 +64,61 @@ class SideMenu extends Component {
                             </Text>
                         </View>
 
-                        <View style={styles.navSectionStyle} >
-                            <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, flexDirection: 'row', paddingTop: 35}}>
-                                <SocialIcon
-                                    raised={false}
-                                    type='github'
-                                    iconSize={35}
-                                    onPress={
-                                        () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
-                                            if (!supported) {
-                                                console.log('error supported')
-                                            } else {
-                                                return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
-                                            }
-                                        }).catch(err => console.error('An error occurred', err))
-                                    }
-                                />
-                                <SocialIcon
-                                    raised={false}
-                                    type='gitlab'
-                                    iconSize={35}
-                                    onPress={
-                                        () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
-                                            if (!supported) {
-                                                console.log('error supported')
-                                            } else {
-                                                return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
-                                            }
-                                        }).catch(err => console.error('An error occurred', err))
-                                    }
-                                />
-                                <SocialIcon
-                                    raised={false}
-                                    type='instagram'
-                                    iconSize={35}
-                                    onPress={
-                                        () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
-                                            if (!supported) {
-                                                console.log('error supported')
-                                            } else {
-                                                return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
-                                            }
-                                        }).catch(err => console.error('An error occurred', err))
-                                    }
-                                />
-                            </View>
+
+                        <Text>{"\n"}</Text>
+                        <View style={styles.navSectionStyle}>
+                            <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Search')}>
+                                Rechercher
+                            </Text>
                         </View>
+
                     </View>
                 </ScrollView>
                 <View style={styles.footerContainer}>
-                    <Button text="Nous soutenir" title="Nous soutenir" onPress={() => console.log("change by logo here + action load Link http://10.0.2.2:3000")}/>
+                    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, flexDirection: 'row', padding: 50}}>
+                        <SocialIcon
+                            raised={false}
+                            type='github'
+                            iconSize={35}
+                            onPress={
+                                () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
+                                    if (!supported) {
+                                        console.log('error supported')
+                                    } else {
+                                        return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
+                                    }
+                                }).catch(err => console.error('An error occurred', err))
+                            }
+                        />
+                        <SocialIcon
+                            raised={false}
+                            type='gitlab'
+                            iconSize={35}
+                            onPress={
+                                () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
+                                    if (!supported) {
+                                        console.log('error supported')
+                                    } else {
+                                        return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
+                                    }
+                                }).catch(err => console.error('An error occurred', err))
+                            }
+                        />
+                        <SocialIcon
+                            raised={false}
+                            type='instagram'
+                            iconSize={35}
+                            onPress={
+                                () => Linking.canOpenURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative").then(supported => {
+                                    if (!supported) {
+                                        console.log('error supported')
+                                    } else {
+                                        return Linking.openURL("https://github.com/sylvainSUPINTERNET/Albumz-reactNative")
+                                    }
+                                }).catch(err => console.error('An error occurred', err))
+                            }
+                        />
+                    </View>
                 </View>
             </View>
         );
