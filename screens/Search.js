@@ -13,11 +13,14 @@ import {
     StyleSheet,
     Text,
     ImageStore,
-    View, AsyncStorage, Animated, Easing, Settings, Image, Button, Linking
+    View, AsyncStorage, Animated, Easing, Settings, Image, Button, Linking, FlatList
 } from 'react-native';
 
 
 
+import Moment from 'moment';
+
+import QRCode from 'react-native-qrcode';
 
 
 import { Header, Card, SearchBar } from 'react-native-elements';
@@ -44,8 +47,16 @@ export default class Home extends Component<{}> {
 
         this.state = {
             token: null,
-            searchValue: ""
+            searchValue: "",
+            error_search: "",
+            dataForList: ""
         };
+
+
+        this.search = this.search.bind(this);
+
+
+
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
@@ -61,6 +72,68 @@ export default class Home extends Component<{}> {
     }
 
 
+    search(textSearch){
+        console.log("call search");
+
+            console.log(`search for ${textSearch}`)
+            //todo : Call POST vers api
+            //todo: list of result and display (list only if result of query API is length is supérior to 1)
+
+            //TODO PRIORITE :> CORRIGER LES BUGS de retard genre le setState n'actualise pas
+            //par exemple je rentre H il trouve rien, je delete je rerentre ER il va dire aucun result pour h bla bla alors que ca devrait se reset
+
+            let data = new FormData();
+            data.append('searchValue', textSearch.toString());
+
+            const config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data;',
+                },
+                body: data,
+            };
+
+            var self = this;
+
+            fetch("http://10.0.2.2:8000/pictures/search", config)
+                .then((responseData) => {
+                    //console.log(responseData);
+                    //if response error == false setState token ELSE setState error.message
+                    console.log(responseData);
+                    try {
+                        let json = JSON.parse(responseData._bodyText);
+                        console.log(json)
+
+
+                            if(json[0].error === true){
+                                this.setState({
+                                    error_search: json[0].message,
+                                    dataForList: ""
+                                })
+                            }else{
+                                this.setState({
+                                    error_search: `${json[0].nb_results_total} résultats trouvés`,
+                                    dataForList : json
+                                })
+                            }
+                    } catch (err) {
+                        //if not valid json
+                        console.error(err);
+                        this.setState({
+                            error: err
+                        })
+                    }
+
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        error: err
+                    })
+                })
+    };
+
     render() {
         if(this.state.token !== null){
             console.log("search value STATE", this.state.searchValue)
@@ -69,7 +142,7 @@ export default class Home extends Component<{}> {
                     <View>
                         <Header
                             leftComponent={<HeaderLeft navigation={this.props.navigation} />}
-                            centerComponent={{ text: 'Search BAR HERE', style: { color: '#fff' } }}
+                            centerComponent={{ text: 'Search', style: { color: '#fff' } }}
                             rightComponent={<HeaderRight navigation={this.props.navigation} />}
                         />
 
@@ -80,9 +153,14 @@ export default class Home extends Component<{}> {
                                     lightTheme
                                     showLoading
                                     round
-                                    onChangeText={(textSearch) => this.setState({
-                                        searchValue: textSearch
-                                    })}
+
+                                    onChangeText={(textSearch) => {
+                                        this.setState({
+                                            searchValue: textSearch
+                                        });
+
+                                        this.search(textSearch);
+                                    }}
                                     icon={{ type: 'font-awesome', name: 'search' }}
                                     placeholder='Rechercher ...' />
                             </View>
@@ -94,7 +172,7 @@ export default class Home extends Component<{}> {
                     <View>
                         <Header
                             leftComponent={<HeaderLeft navigation={this.props.navigation} />}
-                            centerComponent={{ text: 'Search BAR HERE', style: { color: '#fff' } }}
+                            centerComponent={{ text: 'Search', style: { color: '#fff' } }}
                             rightComponent={<HeaderRight navigation={this.props.navigation} />}
                         />
 
@@ -105,19 +183,51 @@ export default class Home extends Component<{}> {
                                     lightTheme
                                     showLoading
                                     round
-                                    onChangeText={(textSearch) => this.setState({
-                                        searchValue: textSearch
-                                    })}
+                                    onChangeText={(textSearch) => {
+                                        this.setState({
+                                            searchValue: textSearch
+                                        });
+
+                                        this.search(textSearch);
+                                    }}
+
                                     icon={{ type: 'font-awesome', name: 'search' }}
                                     placeholder='Rechercher ...' />
                             </View>
                         </Card>
 
                         <View>
-                            <Text>Résultat pour {this.state.searchValue} ... {"\n"}
-                                sous forme de liste d'image cliquable (faire coté API le select * all LIKE todo</Text>
+                            <Text>Résultat pour {this.state.searchValue}</Text>
+                            <Text>{this.state.error_search}</Text>
                         </View>
 
+                        <FlatList
+                            data={this.state.dataForList}
+                            keyExtractor={(item, index) => index}
+                            renderItem={
+                                ({item}) =>
+                                    <Card title={item.label}>
+                                        <Text style={{textAlign:'center', fontSize:16 ,fontWeight: 'bold'}} icon={{name: 'clock', type: 'font-awesome'}}  >
+                                            {Moment(item.date_publication).format('DD-MM-YYYY à hh:mm')}
+                                        </Text>
+                                        <View style={{alignItems: 'center', justifyContent:'space-between', flex: 1, flexDirection: 'row', paddingTop: 35}}>
+                                            <Image style={{width: 150, height: 150}}
+                                                   source={{uri:`http://10.0.2.2/albumzAPI/var/public/upload/pictures/${item.name}`}}
+                                                   resizeMode="cover"
+                                            />
+                                            <QRCode
+                                                value={`http://localhost:8000/pictures/${item.name}/display`}
+                                                size={150}
+                                                bgColor='purple'
+                                                fgColor='white'/>
+                                        </View>
+                                        <Text>{"\n"}</Text>
+                                        <View>
+                                            <Text style={{textAlign: 'right'}}>Catégorie : {item.category}</Text>
+                                        </View>
+                                    </Card>
+                            }
+                        />
                     </View>
                 );
             }
