@@ -15,11 +15,7 @@ import Search from './screens/Search';
 
 import SideMenu from './screens/menu/sideMenu';
 
-
-//faire le logout (check if one key user_token is not empty in storage
-//if not empty => user is connected so display the button "logout" into the menu and create a method to remove th keyItem
-
-
+//Screens routes
 const drawerMenu = DrawerNavigator({
     Home: {
         screen: Home,
@@ -41,7 +37,7 @@ const drawerMenu = DrawerNavigator({
     },
     Search: {
         screen: Search
-    }
+    },
 
 
 }, {

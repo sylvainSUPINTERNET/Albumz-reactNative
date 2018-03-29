@@ -6,10 +6,9 @@
 
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, Share, Linking, TouchableHighlight, TouchableOpacity
+    View, AsyncStorage,FlatList, Image, ScrollView,Alert, Share, Linking, TouchableOpacity
 } from 'react-native';
 
 import QRCode from 'react-native-qrcode';
@@ -50,16 +49,13 @@ export default class Home extends Component<{}> {
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token
             })
         });
     }
-
-    //TODO: clear token -get only id numeric- THEN call api get all pictures
-    // TODO: THEN get path of picture and send into QRcode (npm install before) and regarder
 
     seeMyPictures(){
         this.state.displayPictures = true;
@@ -70,8 +66,6 @@ export default class Home extends Component<{}> {
             data.append('pictures_uploaded_by_user_token', user_id_from_token);
 
 
-            // Create the config object for the POST
-            // You typically have an OAuth2 token that you use for authentication
             const config = {
                 method: 'POST',
                 headers: {
@@ -83,14 +77,12 @@ export default class Home extends Component<{}> {
 
             fetch("http://10.0.2.2:8000/pictures/my/uploaded", config)
                 .then((responseData) => {
-                console.log(responseData);
-                //TODO: If not pictures, checker la response API et display 'vous n'avez pas encor d'image !'
-
+                console.info(responseData);
                     try{
                         let json = JSON.parse(responseData._bodyText);
                         if(json[0].error === true){ // true beause, No image to display error return from API
                             Alert.alert(json[0].message);
-                            console.log("VOUS AVEZ PAS D4IMAGE");
+                            console.log("VOUS AVEZ PAS D'IMAGE");
                             //If every image have been deleted => redirect on button "Display image"
                             this.setState({
                                 displayPictures: false
@@ -109,22 +101,21 @@ export default class Home extends Component<{}> {
 
 
                     }catch (err){
-                        console.log(err);
+                        console.error(err);
                     }
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         }else{
-            console.log("vous êtes DECO LA PUTEIN DE VOUS");
+            console.log("Vous êtes pas connecté");
         }
     }
 
-    //TODO:: Ajouter une route coté API return le QRcode => (a mettre sur le bouton linking)
 
     sharePicture(url_pic){
         Share.share({
-            message: url_pic, //TODO // add a route in API to send a file and convert into QRcode php and display on share
+            message: url_pic,
             url: url_pic,
             title: 'Albumz - PC'
         }, {
@@ -147,7 +138,6 @@ export default class Home extends Component<{}> {
                 console.log(responseData);
                 let json = JSON.parse(responseData._bodyText);
                 if(json[0].error === false){
-                    //TODO: refresh la scene
                     console.log("success_delete", "refresh scene")
                     if(this.state.token !== null){
                         let user_id_from_token = this.state.token.replace(/\D/g,'');
@@ -156,8 +146,6 @@ export default class Home extends Component<{}> {
                         data.append('pictures_uploaded_by_user_token', user_id_from_token);
 
 
-                        // Create the config object for the POST
-                        // You typically have an OAuth2 token that you use for authentication
                         const config = {
                             method: 'POST',
                             headers: {
@@ -197,20 +185,18 @@ export default class Home extends Component<{}> {
                                     });
 
                                 }catch (err){
-                                    console.log(err);
+                                    console.error(err);
                                 }
                             })
                             .catch(err => {
-                                console.log(err);
+                                console.error(err);
                             })
                     }else{
-                        console.log("vous êtes DECO LA PUTEIN DE VOUS");
+                        console.log("vous êtes déconnecté !");
                     }
                 }
 
             })
-
-        //fetch delete SI json return error = false => on setState le tableau d'image entier, ou enlever l'image qui vient d'être delete
     }
 
 
@@ -225,8 +211,9 @@ export default class Home extends Component<{}> {
                     />
                     <View>
                         <Tile
-                            imageSrc={{require: ('./assets/are_you_sure_about_that.jpg')}}
+                            imageSrc={require('../assets/tile.jpg')}
                             title="Vous êtes sur le point d'accèder à votre gallerie photos "
+                            caption="Diffuser vos photos à volonté !"
                             contentContainerStyle={{height: 160}}>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20}}>
                                 <Button                   icon={{name: 'times', type: 'font-awesome'}}  // optional
@@ -341,17 +328,3 @@ export default class Home extends Component<{}> {
 
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});

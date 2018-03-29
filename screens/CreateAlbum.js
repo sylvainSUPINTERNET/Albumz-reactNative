@@ -6,23 +6,20 @@
 
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
-    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, TextInput
+    View, AsyncStorage, Alert
 } from 'react-native';
 
 import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
 
-import Hyperlink from 'react-native-hyperlink'
 
 
 import StyleElement from './style/style_element';
 
-import { Header, Card, Button, Icon, FormLabel, FormInput } from 'react-native-elements';
+import { Header, Card, Button, FormLabel, FormInput } from 'react-native-elements';
 
-import Moment from 'moment';
 
 export default class CreateAlbum extends Component<{}> {
     static navigationOptions = {
@@ -45,7 +42,7 @@ export default class CreateAlbum extends Component<{}> {
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token,
@@ -67,7 +64,7 @@ export default class CreateAlbum extends Component<{}> {
             Alert.alert('error creation album', 'Fields are not filled')
         }else{
 
-            console.log("ok (todo refresh fields)");
+            console.debug("ok (todo refresh fields)");
             let data = new FormData();
             data.append('album_name', this.state.album_name);
             data.append('album_description', this.state.album_description);
@@ -92,7 +89,7 @@ export default class CreateAlbum extends Component<{}> {
                             this.props.navigation.navigate('Albumz')
                         }
                     }
-                ).catch(err => console.log(err))
+                ).catch(err => console.error(err))
 
         }
 
@@ -148,17 +145,3 @@ export default class CreateAlbum extends Component<{}> {
     }
 
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});

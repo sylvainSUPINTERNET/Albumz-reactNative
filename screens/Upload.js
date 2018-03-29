@@ -19,20 +19,6 @@ import StyleElement from './style/style_element';
 import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
 
-
-
-
-
-
-// IMPORTANT, if you used Emulator dont forget to take some pics ! .....
-
-
-//UTILISER this.setState permet de faire l'asynchrone
-
-
-//On peut aussi stocker un component dans une variabl et via le bind utilise desmethod avec des ref
-//voir SuiteUI tp
-
 export default class Upload extends Component<{}> {
 
 
@@ -60,12 +46,10 @@ export default class Upload extends Component<{}> {
         };
 
 
-
-
         //set token if user already connected
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token
@@ -79,8 +63,6 @@ export default class Upload extends Component<{}> {
 
 
     getSelectedImages(picturesSelected){
-
-        //TO DO : fixed le soucis de sa commence a 1 sur le selectimage et pas à 0 ? donc message est erroné
 
         let nbOfPictures = picturesSelected.length;
 
@@ -100,7 +82,7 @@ export default class Upload extends Component<{}> {
 
 
         //display message Vous avez select : X pictures
-        console.log(this.state.nb_pictures_selected);
+        console.info(this.state.nb_pictures_selected);
         if(this.state.nb_pictures_selected === 0){
             this.setState({
                 message_selected : "Veuillez sélectionner les photos pour votre albumz "
@@ -121,6 +103,7 @@ export default class Upload extends Component<{}> {
     }
 
 
+    //generate random string for the picture
     makeIdForPic(){
         let text = "";
         let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -150,8 +133,6 @@ export default class Upload extends Component<{}> {
                     data.append('user_id', id_from_token);
 
 
-                    // Create the config object for the POST
-                    // You typically have an OAuth2 token that you use for authentication
                     const config = {
                         method: 'POST',
                         headers: {
@@ -171,7 +152,6 @@ export default class Upload extends Component<{}> {
                             }else{
                                 //set album list
                                 //convert into array
-
                                 this.setState({
                                     album_selected: json,
                                 });
@@ -184,7 +164,7 @@ export default class Upload extends Component<{}> {
                             }
                         })
                         .catch(err => {
-                            console.log(err);
+                            console.error(err);
                         })
 
                 }else{
@@ -197,7 +177,7 @@ export default class Upload extends Component<{}> {
 
 
         upload(){
-        //console.log(`Photo qui vont etre upload => ${this.state.pictures}`);
+            //console.log(`Photo qui vont etre upload => ${this.state.pictures}`);
             //timer vibration
             const DURATION = 1000;
             const PATTERN = [1000, 2000, 3000]
@@ -223,7 +203,6 @@ export default class Upload extends Component<{}> {
                     }
 
 
-                    //console.log(uriList);
                     if(uriList.length > 0){
                         //convert uri to url
                         //en base de donnée il y aura les deux
@@ -232,11 +211,6 @@ export default class Upload extends Component<{}> {
                          console.log(uriList[x]);
                          }
                          */
-                        //TODO: upload a group of pic ! - change API and manage an array not a simply variable
-                        //TODO : so picture_upload (param to send its an array of file)
-
-                        //TODO SUR L'API
-                        //TODO : AJOUTER creation user PUIS sur l'entité image ID_user (revoir pictures/add aussi pour ajouter id user pour recuperr ensuite sur l'album)
 
                         let data = new FormData();
                         let renamePic = this.makeIdForPic();
@@ -252,8 +226,7 @@ export default class Upload extends Component<{}> {
                         data.append('picture_label', this.state.picture_label.toString())
                         data.append('picture_category',  this.state.picture_category.toString())
 
-                        // Create the config object for the POST
-                        // You typically have an OAuth2 token that you use for authentication
+
                         const config = {
                             method: 'POST',
                             headers: {
@@ -267,8 +240,6 @@ export default class Upload extends Component<{}> {
                         fetch("http://10.0.2.2:8000/pictures/add", config)
                             .then((responseData) => {
                                 console.log(responseData);
-                                //todo: get id ET ajouter ans lalbum (get picture_id from response pour prepare l'ajout picture
-                                //add picture to album
                                 let json = JSON.parse(responseData._bodyText);
                                 if(self.state.album_choose_name === " "){
                                     //value default choose
@@ -308,7 +279,7 @@ export default class Upload extends Component<{}> {
                                                 }
                                             })
                                             .catch(err => {
-                                                console.log(err);
+                                                console.error(err);
                                             })
 
 
@@ -317,7 +288,7 @@ export default class Upload extends Component<{}> {
                                 }
                             })
                             .catch(err => {
-                                console.log(err);
+                                console.error(err);
                             })
 
 
@@ -328,16 +299,12 @@ export default class Upload extends Component<{}> {
 
             }
 
-        //Faire un fetch post vers notre api symfony qui va recuperer la liste des uri passer en parametre et les uploads
-
     }
 
 
 
 
   render() {
-
-            //todo : fixed bug (if only one album, the value is consider as no album selected
       console.log("albums",     this.state.album_selected_array)
                let albumItem = this.state.album_selected_array.map( (album_name, i) => {
                     return <Picker.Item key={i} value={album_name} label={album_name} />
@@ -406,8 +373,6 @@ export default class Upload extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   instructions: {

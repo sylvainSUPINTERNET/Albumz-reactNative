@@ -14,16 +14,14 @@ import {
     StyleSheet,
     Text,
     View,
-    TextInput,
     Button,
     AsyncStorage,
-    KeyboardAvoidingView,
     ActivityIndicator, ScrollView, Alert
 } from 'react-native';
 
 
 
-import {Card, FormLabel, FormInput ,FormValidationMessage, Header} from 'react-native-elements'
+import {Card, FormLabel, FormInput, Header} from 'react-native-elements'
 
 
 
@@ -49,7 +47,7 @@ export default class Authentification extends Component<{}> {
         //set token if user already connected
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token
@@ -67,9 +65,6 @@ export default class Authentification extends Component<{}> {
     }
 
     register(){
-        console.log("test clicked register");
-
-
         let data = new FormData();
         data.append('user_firstname', this.state.register_firstname);
         data.append('user_lastname', this.state.register_lastname);
@@ -95,8 +90,6 @@ export default class Authentification extends Component<{}> {
 
         fetch("http://10.0.2.2:8000/user/register", config)
             .then((responseData) => {
-                //console.log(responseData);
-               //if response error == false setState token ELSE setState error.message
                 try {
                     let json = JSON.parse(responseData._bodyText);
                     if(json[0].error === false){
@@ -107,7 +100,7 @@ export default class Authentification extends Component<{}> {
                         AsyncStorage.setItem('user_token', this.state.token);
                         AsyncStorage.getItem('user_token').then(function(token){
                             console.log(token);
-                        }).catch(err => console.log(err))
+                        }).catch(err => console.error(err))
                     }else{
                         this.setState({
                             error : json[0].message
@@ -126,7 +119,7 @@ export default class Authentification extends Component<{}> {
 
             })
             .catch(err => {
-                console.log(err);
+                console.error(err);
                 this.setState({
                     error: err
                 })
@@ -144,14 +137,12 @@ export default class Authentification extends Component<{}> {
 
 
 
-
+        //Login filled correctly ONLY
         if(!this.state.login_firstname || !this.state.login_lastname || !this.state.login_email  || !this.state.login_password){
             Alert.alert("Erreur pendant la saisie de vos informations !")
             return
         }
 
-        // Create the config object for the POST
-        // You typically have an OAuth2 token that you use for authentication
         const config = {
             method: 'POST',
             headers: {
@@ -163,8 +154,6 @@ export default class Authentification extends Component<{}> {
 
         fetch("http://10.0.2.2:8000/user/login", config)
             .then((responseData) => {
-                //console.log(responseData);
-                //if response error == false setState token ELSE setState error.message
                 try {
                     let json = JSON.parse(responseData._bodyText);
                     if(json[0].error === false){
@@ -360,16 +349,3 @@ export default class Authentification extends Component<{}> {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});

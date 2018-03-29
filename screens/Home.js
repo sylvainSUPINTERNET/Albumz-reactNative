@@ -6,30 +6,23 @@
 
 import React, { Component } from 'react';
 import {
-  Platform,
-  StyleSheet,
   Text,
-    ImageStore,
-  View, AsyncStorage, Animated, Easing, Settings, Image, Button, Linking
+  View, AsyncStorage, Animated, Easing
 } from 'react-native';
 
 
 
 
+//React-native-elements for  UI
+import { Header, Card } from 'react-native-elements';
 
-import { Header } from 'react-native-elements';
-
-import { Card } from 'react-native-elements'
-
-
-
-
+//Menu left / right (header logo droite gauche)
 import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
 
 import Hyperlink from 'react-native-hyperlink'
 
-
+//Custom CSS
 import StyleElement from './style/style_element';
 
 
@@ -44,11 +37,11 @@ export default class Home extends Component<{}> {
         this.state = {
             token: null,
             spinValue: new Animated.Value(0)
-    };
+        };
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token
@@ -62,8 +55,10 @@ export default class Home extends Component<{}> {
     componentDidMount () {
         this.spin()
     }
+
+    //Animation (non used)
     spin () {
-        this.state.spinValue.setValue(0)
+        this.state.spinValue.setValue(0);
         Animated.timing(
             this.state.spinValue,
             {
@@ -72,8 +67,6 @@ export default class Home extends Component<{}> {
                 easing: Easing.linear
             }
         ).start(() => this.spin())
-
-
     }
 
 
@@ -85,9 +78,10 @@ export default class Home extends Component<{}> {
             outputRange: ['0deg', '360deg']
         });
 
-        console.log("YOUR TOKEN : " + this.state.token);
+        console.info("YOUR TOKEN : " + this.state.token);
+
+        //if not connected
         if(this.state.token !== null){
-            // TODO// header on each page and see why we cant navigate ???
             return (
 
                 <View>
@@ -96,7 +90,7 @@ export default class Home extends Component<{}> {
                         centerComponent={{ text: 'Albumz', style: { color: '#fff' } }}
                         rightComponent={<HeaderRight navigation={this.props.navigation} />}
                     />
-
+                    {/*
                         <View>
                             <Animated.Image
                                 style={{
@@ -106,12 +100,20 @@ export default class Home extends Component<{}> {
                                 source={{uri: 'http://bleach.lyndir.com/roster/img/Interface/Icons/inv_sword_2h_ashbringercorrupt.jpg'}}
                             />
                         </View>
+                        */}
 
                     <Card title="Welcom on Albumz :)">
                         {
                         <View>
-                            <Text>Welcom on Albumz application, you are allowed to upload your picture and create your albums. You also can share your albums and pictures to your all friends !</Text>
-                            <Text>Your token : {this.state.token}</Text>
+                            <Text>Welcom on Albumz application, you are allowed to upload your picture and create your albums.
+                                <Text>{"\n"}</Text>
+                                <Text>{"\n"}</Text>
+                                You also can share your albums and pictures to your all friends !
+                                <Text>{"\n"}</Text>
+                            </Text>
+                            <Text>Your access token is :
+                                <Text style={{color: 'green'}}>{this.state.token}</Text>
+                            </Text>
                         </View>
 
                         }
@@ -155,16 +157,3 @@ export default class Home extends Component<{}> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});

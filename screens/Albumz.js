@@ -6,24 +6,19 @@
 
 import React, { Component } from 'react';
 import {
-    Platform,
-    StyleSheet,
     Text,
-    View, AsyncStorage,FlatList, Image, WebView, ScrollView, SectionList, Alert, TouchableOpacity
+    View, AsyncStorage,FlatList, Image, ScrollView, Alert, TouchableOpacity
 } from 'react-native';
 
 
 import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
 
-import Hyperlink from 'react-native-hyperlink'
-
-
 import StyleElement from './style/style_element';
 
 import { Header, Card, Button, Icon } from 'react-native-elements';
 
-import Moment from 'moment';
+import Moment from 'moment'; //formatted hour / date
 
 
 export default class Albumz extends Component<{}> {
@@ -52,7 +47,7 @@ export default class Albumz extends Component<{}> {
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token
@@ -97,8 +92,8 @@ export default class Albumz extends Component<{}> {
                 }
             ).catch(err => console.log(err))
 
-        console.log('state atfter call',this.state.displayAlbums);
-        console.log('state after call',this.state.albums);
+        console.debug('state atfter call',this.state.displayAlbums);
+        console.debug('state after call',this.state.albums);
     }
 
 
@@ -193,9 +188,9 @@ export default class Albumz extends Component<{}> {
                         })
                     }
                 }
-            ).catch(err => console.log(err))
+            ).catch(err => console.error(err))
 
-        console.log(this.state.pictureList);
+        console.debug(this.state.pictureList);
 
 
 
@@ -254,20 +249,12 @@ export default class Albumz extends Component<{}> {
                                         })
                                     }
                                 }
-                            ).catch(err => console.log(err))
+                            ).catch(err => console.error(err))
                     }
                 }
-            ).catch(err => console.log(err))
+            ).catch(err => console.error(err))
 
     }
-
-
-    /*
-    componentDidMount(){
-        this.getAlbums();
-    }
-    */
-
 
 
 
@@ -423,16 +410,3 @@ export default class Albumz extends Component<{}> {
 
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});

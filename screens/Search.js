@@ -9,11 +9,9 @@
 
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
-    ImageStore,
-    View, AsyncStorage, Animated, Easing, Settings, Image, Button, Linking, FlatList
+    View, AsyncStorage,Image,FlatList
 } from 'react-native';
 
 
@@ -25,14 +23,8 @@ import QRCode from 'react-native-qrcode';
 
 import { Header, Card, SearchBar } from 'react-native-elements';
 
-
-
-
 import HeaderLeft from './menu/headerLeft';
 import HeaderRight from './menu/headerRight';
-
-import Hyperlink from 'react-native-hyperlink'
-
 
 import StyleElement from './style/style_element';
 
@@ -60,27 +52,19 @@ export default class Home extends Component<{}> {
 
         AsyncStorage.getItem('user_token', (err, token) => {
             if(err)
-                console.log(err);
+                console.error(err);
 
             this.setState({
                 token : token
             })
         });
 
-        //bind here
-
-    }
+        }
 
 
     search(textSearch){
-        console.log("call search");
-
-            console.log(`search for ${textSearch}`)
-            //todo : Call POST vers api
-            //todo: list of result and display (list only if result of query API is length is supérior to 1)
-
-            //TODO PRIORITE :> CORRIGER LES BUGS de retard genre le setState n'actualise pas
-            //par exemple je rentre H il trouve rien, je delete je rerentre ER il va dire aucun result pour h bla bla alors que ca devrait se reset
+        console.info("call search");
+        console.log(`search for ${textSearch}`)
 
             let data = new FormData();
             data.append('searchValue', textSearch.toString());
@@ -94,17 +78,14 @@ export default class Home extends Component<{}> {
                 body: data,
             };
 
-            var self = this;
+            var self = this; // get instance of this
 
             fetch("http://10.0.2.2:8000/pictures/search", config)
                 .then((responseData) => {
-                    //console.log(responseData);
-                    //if response error == false setState token ELSE setState error.message
                     console.log(responseData);
                     try {
                         let json = JSON.parse(responseData._bodyText);
                         console.log(json)
-
 
                             if(json[0].error === true){
                                 this.setState({
@@ -127,7 +108,7 @@ export default class Home extends Component<{}> {
 
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                     this.setState({
                         error: err
                     })
@@ -261,16 +242,3 @@ export default class Home extends Component<{}> {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});
